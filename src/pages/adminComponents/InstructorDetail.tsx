@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 
 interface SubTask {
@@ -25,6 +25,7 @@ const InstructorDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [assignedTasks, setAssignedTasks] = useState<AssignedTask[]>([]);
   const [username, setUsername] = useState("");
+  const [isEditMode, setIsEditMode] = useState(false);
   const db = getFirestore();
 
   useEffect(() => {
@@ -48,6 +49,8 @@ const InstructorDetail: React.FC = () => {
   }, [id, db]);
 
   const handleTaskCheck = async (assignedTaskId: string, taskId: string) => {
+    if (!isEditMode) return;
+
     const updatedTasks = assignedTasks.map((assignedTask) => {
       if (assignedTask.originId === assignedTaskId) {
         const updatedTaskList = assignedTask.tasks.map((task) =>
@@ -74,6 +77,8 @@ const InstructorDetail: React.FC = () => {
     taskId: string,
     subTaskId: string,
   ) => {
+    if (!isEditMode) return;
+
     const updatedTasks = assignedTasks.map((assignedTask) => {
       if (assignedTask.originId === assignedTaskId) {
         const updatedTaskList = assignedTask.tasks.map((task) => {
@@ -105,9 +110,30 @@ const InstructorDetail: React.FC = () => {
 
   return (
     <div className="p-6 bg-white shadow-md rounded-lg max-w-6xl mx-auto">
+      <Link
+        to="/"
+        className="mb-4 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      >
+        Back to Home
+      </Link>
       <h2 className="text-2xl font-semibold text-gray-900 mb-6">
         Assigned Tasks for {username}
       </h2>
+      <div className="flex items-center mb-6">
+        <label
+          htmlFor="editMode"
+          className="mr-2 font-medium text-gray-700"
+        >
+          Edit Mode
+        </label>
+        <input
+          id="editMode"
+          type="checkbox"
+          checked={isEditMode}
+          onChange={() => setIsEditMode(!isEditMode)}
+          className="form-checkbox"
+        />
+      </div>
       {assignedTasks.length === 0 ? (
         <p className="text-gray-700">No tasks assigned.</p>
       ) : (
@@ -133,6 +159,7 @@ const InstructorDetail: React.FC = () => {
                         handleTaskCheck(assignedTask.originId, task.id)
                       }
                       className="form-checkbox mt-1"
+                      disabled={!isEditMode}
                     />
                     <div>
                       <h4
@@ -162,6 +189,7 @@ const InstructorDetail: React.FC = () => {
                                   )
                                 }
                                 className="form-checkbox mt-1"
+                                disabled={!isEditMode}
                               />
                               <span
                                 className={`text-base ${

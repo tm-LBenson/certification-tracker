@@ -95,6 +95,8 @@ const App: React.FC = () => {
       const fetchedInstructors = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         name: doc.data().name,
+        email: doc.data().email,
+        role: doc.data().role,
       }));
       setInstructors(fetchedInstructors);
     };
