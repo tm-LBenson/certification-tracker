@@ -152,6 +152,14 @@ const AdminPage: React.FC<AdminPageProps> = ({ instructors }) => {
       </div>
       <div className="mb-10">
         <button
+          onClick={() => setIsModalOpen(true)}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mb-4"
+        >
+          Add New User
+        </button>
+      </div>
+      <div className="mb-10">
+        <button
           onClick={() => setIsAllUsersModalOpen(true)}
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
         >
