@@ -14,8 +14,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   if (!modalRoot) throw new Error("No modal root found");
 
   return ReactDOM.createPortal(
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center min-w-[400px] p-4">
-      <div className="bg-white p-5 rounded-lg max-w-xl w-full relative">
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center  overflow-y-auto items-center min-w-[400px] p-4">
+      <div className="bg-white p-5 rounded-lg max-w-xl  w-full relative">
         <button
           onClick={onClose}
           className="absolute top-2 right-2 text-xl font-bold"
